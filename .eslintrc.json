@@ -27,11 +27,8 @@
       }
     ],
     "react/jsx-props-no-spreading": [
-      "error",
+      "off",
       {
-        "html": "ignore",
-        "custom": "ignore",
-        "explicitSpread": "ignore",
         "exceptions": []
       }
     ]
