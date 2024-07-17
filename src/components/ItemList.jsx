@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { List, Typography, Spin } from 'antd';
-import { supabase } from '../utils/supabaseClient';
+import supabase from '../utils/supabaseClient';
 
 const { Text } = Typography;
 
