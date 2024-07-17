@@ -8,5 +8,7 @@ const useStore = create(
   })),
 );
 
-window.store = useStore;
+if (process.env.NODE_ENV === 'development') {
+  window.store = useStore;
+}
 export default useStore;
