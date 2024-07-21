@@ -8,13 +8,40 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const checkAndInsertUser = async (sessionuser) => {
+    const { error } = await supabase
+      .from('users')
+      .select('user_id')
+      .eq('user_id', sessionuser.id)
+      .single();
+
+    if (error) {
+      // User does not exist, insert new user
+      const { error: insertError } = await supabase
+        .from('users')
+        .insert({ user_id: sessionuser.id, email: sessionuser.email });
+
+      if (insertError) {
+        console.error('Error inserting user:', insertError);
+      } else {
+        console.log('User inserted successfully');
+      }
+    } else {
+      console.log('User already exists');
+    }
+  };
+
   useEffect(() => {
     const getSession = async () => {
       const { data, error } = await supabase.auth.getSession();
       if (error) {
         console.error('Error fetching session', error);
       } else {
-        setUser(data?.user ?? null);
+        const sessionuser = data?.session?.user ?? null;
+        setUser(sessionuser);
+        if (sessionuser) {
+          await checkAndInsertUser(sessionuser);
+        }
       }
       setLoading(false);
     };
