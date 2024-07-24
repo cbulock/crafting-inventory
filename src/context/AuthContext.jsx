@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
-import supabase from '../../utils/supabaseClient';
+import supabase from '../utils/supabaseClient';
 
 const AuthContext = createContext();
 
@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
         console.log('User inserted successfully');
       }
     } else {
-      console.log('User already exists');
+      // User already exists
     }
   };
 
