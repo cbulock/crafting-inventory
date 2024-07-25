@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Button, Form } from 'antd';
+import { Input, Form } from 'antd';
+import { Button } from '@/components/ui/button';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useStore from '../store';
@@ -40,9 +41,7 @@ const MyForm = () => {
       </Form.Item>
       {/* Add other form items here */}
       <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
+        <Button type="submit">Submit</Button>
       </Form.Item>
     </Form>
   );
