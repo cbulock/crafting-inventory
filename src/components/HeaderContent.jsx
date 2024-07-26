@@ -14,9 +14,8 @@ const HeaderBar = () => {
   }
 
   return (
-    <div>
-      <h1>Crafting Inventory</h1>
-      <p>{user?.user_metadata?.name}</p>
+    <div className="bg-cyan-800	p-2 flex gap-4 items-center">
+      <h1 className="text-3xl text-white grow">Crafting Inventory</h1>
       <Avatar>
         <AvatarImage src={user?.user_metadata?.avatar_url} />
         <AvatarFallback>

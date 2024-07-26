@@ -29,19 +29,17 @@ const loaderVariants = cva('animate-spin text-primary', {
   },
 });
 
-const LoadingSpinner = ({ size, show, children, className }) => (
+const LoadingSpinner = ({
+  size = 'medium',
+  show = true,
+  children = null,
+  className = '',
+}) => (
   <span className={spinnerVariants({ show })}>
     <Loader2 className={cn(loaderVariants({ size }), className)} />
     {children}
   </span>
 );
-
-LoadingSpinner.defaultProps = {
-  size: 'medium',
-  show: true,
-  children: null,
-  className: '',
-};
 
 LoadingSpinner.propTypes = {
   size: PropTypes.oneOf(['small', 'medium', 'large']),
