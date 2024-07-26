@@ -2,8 +2,15 @@
 
 import React from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { Input, Form } from 'antd';
 import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useStore from '../store';
@@ -14,11 +21,10 @@ const schema = Yup.object().shape({
 
 const MyForm = () => {
   const setFormData = useStore((state) => state.setFormData);
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
+  const form = useForm({
+    defaultValues: {
+      name: '',
+    },
     resolver: yupResolver(schema),
   });
 
@@ -27,22 +33,23 @@ const MyForm = () => {
   };
 
   return (
-    <Form onFinish={handleSubmit(onSubmit)}>
-      <Form.Item
-        label="Name"
-        validateStatus={errors.name ? 'error' : ''}
-        help={errors.name ? errors.name.message : ''}
-      >
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Controller
+          control={form.control}
           name="name"
-          control={control}
-          render={({ field }) => <Input {...field} />}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
-      </Form.Item>
-      {/* Add other form items here */}
-      <Form.Item>
         <Button type="submit">Submit</Button>
-      </Form.Item>
+      </form>
     </Form>
   );
 };

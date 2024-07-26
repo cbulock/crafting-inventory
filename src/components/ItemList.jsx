@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { List, Typography, Spin } from 'antd';
+import List from '@/components/List';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import supabase from '../utils/supabaseClient';
-
-const { Text } = Typography;
 
 const ItemList = () => {
   const [items, setItems] = useState([]);
@@ -27,20 +26,20 @@ const ItemList = () => {
   }, []);
 
   if (loading) {
-    return <Spin />;
+    return <LoadingSpinner />;
   }
 
   return (
-    <List
-      header={<div>Item List</div>}
-      bordered
-      dataSource={items}
-      renderItem={(item) => (
-        <List.Item>
-          <Text>{item.name}</Text>
-        </List.Item>
-      )}
-    />
+    <>
+      <h3 className="text-xl font-bold mb-4">Item List</h3>
+      <List
+        bordered
+        data={items}
+        renderItem={(item) => (
+          <span className="text-gray-700">{item.name}</span>
+        )}
+      />
+    </>
   );
 };
 

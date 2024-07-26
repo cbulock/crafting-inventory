@@ -1,28 +1,30 @@
 'use client';
 
 import { useAuth } from '@/context/AuthContext';
-import { Avatar, Flex, Spin, Typography } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-
-const { Text, Title } = Typography;
+import LogoutButton from '@/components/LogoutButton';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User } from 'lucide-react';
 
 const HeaderBar = () => {
   const { user } = useAuth();
 
   if (!user) {
-    return <Spin />;
+    return <LoadingSpinner />;
   }
 
   return (
-    <Flex>
-      <Title>Crafting Inventory</Title>
-      <Text>{user?.user_metadata?.name}</Text>
-      <Avatar
-        size={48}
-        icon={<UserOutlined />}
-        src={user?.user_metadata?.avatar_url}
-      />
-    </Flex>
+    <div>
+      <h1>Crafting Inventory</h1>
+      <p>{user?.user_metadata?.name}</p>
+      <Avatar>
+        <AvatarImage src={user?.user_metadata?.avatar_url} />
+        <AvatarFallback>
+          <User />
+        </AvatarFallback>
+      </Avatar>
+      <LogoutButton />
+    </div>
   );
 };
 

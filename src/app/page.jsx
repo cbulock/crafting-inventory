@@ -1,23 +1,21 @@
 'use client';
 
-import { Layout } from 'antd';
 import HeaderContent from '@/components/HeaderContent';
 import ItemList from '@/components/ItemList';
+import withAuth from '@/components/withAuth';
 import MyForm from './MyForm';
 
-const { Header, Footer, Content } = Layout;
-
 const HomePage = () => (
-  <Layout>
-    <Header>
+  <div>
+    <header>
       <HeaderContent />
-    </Header>
-    <Content>
+    </header>
+    <main>
       <MyForm />
       <ItemList />
-    </Content>
-    <Footer>Created by Cameron Bulock</Footer>
-  </Layout>
+    </main>
+    <footer>Created by Cameron Bulock</footer>
+  </div>
 );
 
-export default HomePage;
+export default withAuth(HomePage);

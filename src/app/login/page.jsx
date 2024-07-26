@@ -2,10 +2,9 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Typography } from 'antd';
+import { Button } from '@/components/ui/button';
 import supabase from '../../utils/supabaseClient';
-
-const { Title } = Typography;
+import { SiGoogle } from '@icons-pack/react-simple-icons';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -24,8 +23,9 @@ const LoginPage = () => {
 
   return (
     <div style={{ maxWidth: 400, margin: 'auto', padding: '2rem' }}>
-      <Title level={2}>Login</Title>
-      <Button type="primary" onClick={handleGoogleLogin}>
+      <h2>Login</h2>
+      <Button onClick={handleGoogleLogin}>
+        <SiGoogle className="mr-2 h-4 w-4" />
         Login with Google
       </Button>
     </div>

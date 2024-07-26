@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 import supabase from '../utils/supabaseClient';
 
 const AuthContext = createContext();
@@ -7,6 +8,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   const checkAndInsertUser = async (sessionuser) => {
     const { error } = await supabase
@@ -60,9 +62,15 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
+  const logout = async () => {
+    await supabase.auth.signOut();
+    setUser(null);
+    router.push('/login');
+  };
+
   return useMemo(
     () => (
-      <AuthContext.Provider value={{ user, loading }}>
+      <AuthContext.Provider value={{ user, loading, logout }}>
         {children}
       </AuthContext.Provider>
     ),
