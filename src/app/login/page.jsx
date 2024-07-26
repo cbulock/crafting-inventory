@@ -3,8 +3,8 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import supabase from '../../utils/supabaseClient';
 import { SiGoogle } from '@icons-pack/react-simple-icons';
+import supabase from '../../utils/supabaseClient';
 
 const LoginPage = () => {
   const router = useRouter();
