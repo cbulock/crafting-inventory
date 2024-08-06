@@ -1,24 +1,41 @@
 'use client';
 
-// TODO: delete component
-
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import List from '@/components/List';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import supabase from '../utils/supabaseClient';
 
-const ItemList = () => {
+const MyItems = () => {
+  const { user } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchItems = async () => {
-      const { data, error } = await supabase.from('items').select('name');
+      const currentUserId = user?.id;
+
+      if (!currentUserId) {
+        console.error('No user ID found');
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('user_items')
+        .select(
+          `
+        item,
+        items (name)
+      `,
+        )
+        .eq('user', currentUserId); // Filter records by the current user's ID
 
       if (error) {
         console.error('Error fetching items:', error);
       } else {
-        setItems(data);
+        // Transform data if necessary to fit your component's state structure
+        const itemsForUser = data.map((d) => d.items);
+        setItems(itemsForUser);
       }
 
       setLoading(false);
@@ -33,7 +50,7 @@ const ItemList = () => {
 
   return (
     <>
-      <h3 className="text-xl font-bold mb-4">Item List</h3>
+      <h3 className="text-xl font-bold mb-4">My Items</h3>
       <List
         bordered
         data={items}
@@ -45,4 +62,4 @@ const ItemList = () => {
   );
 };
 
-export default ItemList;
+export default MyItems;

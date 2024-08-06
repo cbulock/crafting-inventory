@@ -1,20 +1,20 @@
 'use client';
 
 import HeaderContent from '@/components/HeaderContent';
-import ItemList from '@/components/ItemList';
+import ItemSearch from '@/components/ItemSearch';
+import MyItems from '@/components/MyItems';
 import withAuth from '@/components/withAuth';
-import MyForm from './MyForm';
 
 const HomePage = () => (
   <div>
     <header>
       <HeaderContent />
     </header>
-    <main>
-      <MyForm />
-      <ItemList />
+    <main className="m-4">
+      <ItemSearch />
+      <MyItems />
     </main>
-    <footer>Created by Cameron Bulock</footer>
+    <footer className="m-4">Created by Cameron Bulock</footer>
   </div>
 );
 
