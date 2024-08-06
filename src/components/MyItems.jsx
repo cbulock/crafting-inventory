@@ -33,7 +33,6 @@ const MyItems = () => {
       if (error) {
         console.error('Error fetching items:', error);
       } else {
-        // Transform data if necessary to fit your component's state structure
         const itemsForUser = data.map((d) => d.items);
         setItems(itemsForUser);
       }
@@ -42,6 +41,32 @@ const MyItems = () => {
     };
 
     fetchItems();
+
+    // TODO: need to limit these subscriptions to only the current user
+    const channel = supabase
+      .channel('realtime:public:user_items')
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'user_items' },
+        (payload) => {
+          console.log('New insert!', payload);
+          fetchItems(); // Re-fetch items on new insert
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'user_items' },
+        (payload) => {
+          console.log('New update!', payload);
+          fetchItems(); // Re-fetch items on update
+        },
+      )
+      .subscribe();
+
+    // Cleanup on component unmount
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   if (loading) {
