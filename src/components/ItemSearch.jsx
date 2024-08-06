@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { useForm } from 'react-hook-form';
@@ -18,7 +19,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -33,14 +33,16 @@ import { toast } from '@/components/ui/use-toast';
 import supabase from '../utils/supabaseClient';
 
 const FormSchema = z.object({
-  item: z.string({
+  item: z.number({
     required_error: 'Please select an item.',
   }),
 });
 
 const ItemSearch = () => {
+  const { user } = useAuth();
   const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // TODO: add loading state
+  // const [loading, setLoading] = useState(true);
 
   const form = useForm({
     resolver: zodResolver(FormSchema),
@@ -56,21 +58,27 @@ const ItemSearch = () => {
         setItems(data);
       }
 
-      setLoading(false);
+      // setLoading(false);
     };
 
     fetchItems();
   }, []);
 
-  const onSubmit = (data) => {
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+  const onSubmit = async (data) => {
+    const { error } = await supabase
+      .from('user_items')
+      .insert([{ item: data.item, user: user?.id }]);
+
+    if (error) {
+      toast({
+        variant: 'destructive',
+        description: `Error inserting item: ${error.message}`,
+      });
+    } else {
+      toast({
+        description: 'Item added successfully',
+      });
+    }
   };
 
   return (
