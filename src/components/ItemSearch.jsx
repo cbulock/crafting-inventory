@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Check, ChevronsUpDown } from 'lucide-react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { z } from 'zod';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -36,6 +36,9 @@ const FormSchema = z.object({
   item: z.number({
     required_error: 'Please select an item.',
   }),
+  quantity: z.number({
+    required_error: 'Please enter a quantity.',
+  }),
 });
 
 const ItemSearch = () => {
@@ -45,6 +48,9 @@ const ItemSearch = () => {
   // const [loading, setLoading] = useState(true);
 
   const form = useForm({
+    defaultValues: {
+      quantity: 1,
+    },
     resolver: zodResolver(FormSchema),
   });
 
@@ -57,7 +63,6 @@ const ItemSearch = () => {
       } else {
         setItems(data);
       }
-
       // setLoading(false);
     };
 
@@ -65,9 +70,10 @@ const ItemSearch = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    const { item, quantity } = data;
     const { error } = await supabase
       .from('user_items')
-      .insert([{ item: data.item, user: user?.id }]);
+      .insert([{ item, quantity, user: user?.id }]);
 
     if (error) {
       toast({
@@ -83,7 +89,10 @@ const ItemSearch = () => {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex items-center gap-4 mb-4"
+      >
         <FormField
           control={form.control}
           name="item"
@@ -142,7 +151,43 @@ const ItemSearch = () => {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <FormField
+          control={form.control}
+          name="quantity"
+          render={() => (
+            <FormItem className="flex flex-col">
+              <FormLabel>Quantity</FormLabel>
+              <FormControl>
+                <Controller
+                  name="quantity"
+                  control={form.control}
+                  render={({
+                    field: { onChange, onBlur, value, name, ref },
+                  }) => (
+                    <input
+                      type="number"
+                      name={name}
+                      ref={ref}
+                      value={value}
+                      onBlur={onBlur}
+                      onChange={(e) =>
+                        onChange(
+                          e.target.value === '' ? '' : Number(e.target.value),
+                        )
+                      }
+                      style={{ width: '8ch' }}
+                      className="border border-gray-300 rounded-md p-2"
+                    />
+                  )}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" className="self-end">
+          Submit
+        </Button>
       </form>
     </Form>
   );
