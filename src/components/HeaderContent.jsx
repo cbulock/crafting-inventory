@@ -16,7 +16,7 @@ const HeaderBar = () => {
   return (
     <div className="bg-primary	p-2 flex gap-4 items-center">
       <h1 className="text-3xl text-primary-foreground grow">
-        Crafting Inventory
+        Inventory Manager
       </h1>
       <Avatar>
         <AvatarImage src={user?.user_metadata?.avatar_url} />

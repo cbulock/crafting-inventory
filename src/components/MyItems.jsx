@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import EditItemDialog from '@/components/EditItemDialog';
 import List from '@/components/List';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import supabase from '../utils/supabaseClient';
@@ -24,16 +25,23 @@ const MyItems = () => {
         .from('user_items')
         .select(
           `
-        item,
-        items (name)
+        id,
+        name,
+        items (name),
+        quantity
       `,
         )
-        .eq('user', currentUserId); // Filter records by the current user's ID
+        .eq('user', currentUserId)
+        .order('name', { ascending: true });
 
       if (error) {
         console.error('Error fetching items:', error);
       } else {
-        const itemsForUser = data.map((d) => d.items);
+        const itemsForUser = data.map((item) => ({
+          id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+        }));
         setItems(itemsForUser);
       }
 
@@ -48,17 +56,15 @@ const MyItems = () => {
       .on(
         'postgres_changes',
         { event: 'INSERT', schema: 'public', table: 'user_items' },
-        (payload) => {
-          console.log('New insert!', payload);
-          fetchItems(); // Re-fetch items on new insert
+        () => {
+          fetchItems();
         },
       )
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'user_items' },
-        (payload) => {
-          console.log('New update!', payload);
-          fetchItems(); // Re-fetch items on update
+        () => {
+          fetchItems();
         },
       )
       .subscribe();
@@ -77,10 +83,14 @@ const MyItems = () => {
     <>
       <h3 className="text-xl font-bold mb-4">My Items</h3>
       <List
-        bordered
         data={items}
+        className="grid grid-cols-[auto_1fr_auto] gap-4"
         renderItem={(item) => (
-          <span className="text-gray-700">{item.name}</span>
+          <>
+            <span className="text-gray-700 font-semibold">{item.quantity}</span>
+            <span className="text-gray-700">{item.name}</span>
+            <EditItemDialog itemId={item.id} />
+          </>
         )}
       />
     </>

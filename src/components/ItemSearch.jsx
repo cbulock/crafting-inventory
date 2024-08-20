@@ -44,6 +44,7 @@ const FormSchema = z.object({
 const ItemSearch = () => {
   const { user } = useAuth();
   const [items, setItems] = useState([]);
+  const [itemName, setItemName] = useState(null);
   // TODO: add loading state
   // const [loading, setLoading] = useState(true);
 
@@ -56,7 +57,10 @@ const ItemSearch = () => {
 
   useEffect(() => {
     const fetchItems = async () => {
-      const { data, error } = await supabase.from('items').select('id, name');
+      const { data, error } = await supabase
+        .from('items')
+        .select('id, name')
+        .order('name', { ascending: true });
 
       if (error) {
         console.error('Error fetching items:', error);
@@ -70,10 +74,13 @@ const ItemSearch = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    console.log('data', data);
     const { item, quantity } = data;
     const { error } = await supabase
       .from('user_items')
-      .insert([{ item, quantity, user: user?.id }]);
+      .insert([
+        { name: itemName, source_item: item, quantity, user: user?.id },
+      ]);
 
     if (error) {
       toast({
@@ -129,6 +136,7 @@ const ItemSearch = () => {
                             key={item.id}
                             onSelect={() => {
                               form.setValue('item', item.id);
+                              setItemName(item.name);
                             }}
                           >
                             <Check
@@ -186,7 +194,7 @@ const ItemSearch = () => {
           )}
         />
         <Button type="submit" className="self-end">
-          Submit
+          Add to Inventory
         </Button>
       </form>
     </Form>
