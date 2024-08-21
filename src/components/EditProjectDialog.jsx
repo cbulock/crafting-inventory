@@ -19,11 +19,10 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import useStore from '@/store';
 import supabase from '../utils/supabaseClient';
 
-const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
+const EditProjectDialog = ({ projectId, onClose = () => {} }) => {
   const { user } = useAuth();
-  const { fetchItems } = useStore();
+  const { fetchProjects } = useStore();
   const [name, setName] = useState(null);
-  const [quantity, setQuantity] = useState(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -34,53 +33,51 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
 
         setLoading(true);
         const { data, error } = await supabase
-          .from('user_items')
+          .from('user_projects')
           .select(
             `
-          name,
-          quantity
-        `,
+            name
+            `,
           )
-          .eq('id', itemId)
+          .eq('id', projectId)
           .eq('user', currentUserId)
           .single();
 
         if (error) {
           toast({
             variant: 'destructive',
-            description: `Error fetching item: ${error.message}`,
+            description: `Error fetching project: ${error.message}`,
           });
         } else {
           setName(data.name);
-          setQuantity(data.quantity);
         }
         setLoading(false);
       };
       fetchItem();
     }
-  }, [open, itemId, toast]);
+  }, [open, projectId, toast]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
     const currentUserId = user?.id;
     const { error } = await supabase
-      .from('user_items')
-      .update({ name, quantity })
-      .eq('id', itemId)
+      .from('user_projects')
+      .update({ name })
+      .eq('id', projectId)
       .eq('user', currentUserId);
 
     if (error) {
       toast({
         variant: 'destructive',
-        description: `Error updating item: ${error.message}`,
+        description: `Error updating project: ${error.message}`,
       });
     } else {
       toast({
-        description: 'Item updated successfully',
+        description: 'Project updated successfully',
       });
       onClose();
       setOpen(false);
-      fetchItems({ userId: currentUserId, projectId });
+      fetchProjects(currentUserId);
     }
   };
 
@@ -99,8 +96,8 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
         <DialogHeader>
           <DialogTitle>{`Edit ${name}`}</DialogTitle>
           <DialogDescription>
-            Update the quantity of the selected item. Enter the new quantity and
-            click save to apply the changes.
+            Use this dialog to edit the name of your project. Make sure to
+            provide a meaningful name that reflects the purpose of the project.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="grid gap-4 py-4">
@@ -112,18 +109,6 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="quantity" className="text-right">
-              Quantity
-            </Label>
-            <Input
-              id="quantity"
-              type="number"
-              value={quantity}
-              onChange={(e) => setQuantity(Number(e.target.value))}
               className="col-span-3"
             />
           </div>
@@ -147,10 +132,9 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
   );
 };
 
-EditItemDialog.propTypes = {
-  itemId: PropTypes.number.isRequired,
+EditProjectDialog.propTypes = {
   projectId: PropTypes.number.isRequired,
   onClose: PropTypes.func,
 };
 
-export default EditItemDialog;
+export default EditProjectDialog;

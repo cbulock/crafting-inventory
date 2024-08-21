@@ -1,5 +1,6 @@
 'use client';
 
+import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,6 +31,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { toast } from '@/components/ui/use-toast';
+import useStore from '@/store';
 import supabase from '../utils/supabaseClient';
 
 const FormSchema = z.object({
@@ -41,12 +43,17 @@ const FormSchema = z.object({
   }),
 });
 
-const ItemSearch = () => {
+const ItemSearch = ({ projectId }) => {
   const { user } = useAuth();
+  const { fetchItems } = useStore();
   const [items, setItems] = useState([]);
   const [itemName, setItemName] = useState(null);
   // TODO: add loading state
   // const [loading, setLoading] = useState(true);
+
+  if (!projectId) {
+    return null;
+  }
 
   const form = useForm({
     defaultValues: {
@@ -56,7 +63,7 @@ const ItemSearch = () => {
   });
 
   useEffect(() => {
-    const fetchItems = async () => {
+    const fetchDefaultItems = async () => {
       const { data, error } = await supabase
         .from('items')
         .select('id, name')
@@ -70,17 +77,20 @@ const ItemSearch = () => {
       // setLoading(false);
     };
 
-    fetchItems();
+    fetchDefaultItems();
   }, []);
 
   const onSubmit = async (data) => {
-    console.log('data', data);
     const { item, quantity } = data;
-    const { error } = await supabase
-      .from('user_items')
-      .insert([
-        { name: itemName, source_item: item, quantity, user: user?.id },
-      ]);
+    const { error } = await supabase.from('user_items').insert([
+      {
+        name: itemName,
+        project: projectId,
+        source_item: item,
+        quantity,
+        user: user?.id,
+      },
+    ]);
 
     if (error) {
       toast({
@@ -91,6 +101,7 @@ const ItemSearch = () => {
       toast({
         description: 'Item added successfully',
       });
+      fetchItems({ projectId, userId: user?.id });
     }
   };
 
@@ -199,6 +210,10 @@ const ItemSearch = () => {
       </form>
     </Form>
   );
+};
+
+ItemSearch.propTypes = {
+  projectId: PropTypes.number,
 };
 
 export default ItemSearch;
