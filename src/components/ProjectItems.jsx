@@ -7,7 +7,7 @@ import List from '@/components/List';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import supabase from '../utils/supabaseClient';
 
-const MyItems = () => {
+const ProjectItems = () => {
   const { user } = useAuth();
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -97,4 +97,4 @@ const MyItems = () => {
   );
 };
 
-export default MyItems;
+export default ProjectItems;

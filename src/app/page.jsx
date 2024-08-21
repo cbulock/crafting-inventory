@@ -2,7 +2,7 @@
 
 import HeaderContent from '@/components/HeaderContent';
 import ItemSearch from '@/components/ItemSearch';
-import MyItems from '@/components/MyItems';
+import ProjectItems from '@/components/ProjectItems';
 import withAuth from '@/components/withAuth';
 
 const HomePage = () => (
@@ -12,7 +12,7 @@ const HomePage = () => (
     </header>
     <main className="m-4">
       <ItemSearch />
-      <MyItems />
+      <ProjectItems />
     </main>
     <footer className="m-4">Created by Cameron Bulock</footer>
   </div>
