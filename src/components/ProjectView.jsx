@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
+import CreateProjectDialog from '@/components/CreateProjectDialog';
 import EditProjectDialog from '@/components/EditProjectDialog';
 import ItemSearch from '@/components/ItemSearch';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -52,6 +53,7 @@ const ProjectView = () => {
           </SelectContent>
         </Select>
         {selectedProject && <EditProjectDialog projectId={selectedProject} />}
+        <CreateProjectDialog />
       </div>
 
       {selectedProject ? (
