@@ -9,7 +9,7 @@ const HomePage = () => (
     <header>
       <HeaderContent />
     </header>
-    <main className="m-4">
+    <main className="m-4 max-w-xl mx-auto">
       <ProjectView />
     </main>
     <footer className="m-4">Created by Cameron Bulock</footer>
