@@ -24,6 +24,7 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
   const { fetchItems } = useStore();
   const [name, setName] = useState(null);
   const [quantity, setQuantity] = useState(null);
+  const [lowThreshold, setLowThreshold] = useState(null);
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -38,7 +39,8 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
           .select(
             `
           name,
-          quantity
+          quantity,
+          low_threshold
         `,
           )
           .eq('id', itemId)
@@ -53,6 +55,7 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
         } else {
           setName(data.name);
           setQuantity(data.quantity);
+          setLowThreshold(data.low_threshold);
         }
         setLoading(false);
       };
@@ -65,7 +68,7 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
     const currentUserId = user?.id;
     const { error } = await supabase
       .from('user_items')
-      .update({ name, quantity })
+      .update({ name, quantity, low_threshold: lowThreshold })
       .eq('id', itemId)
       .eq('user', currentUserId);
 
@@ -99,8 +102,20 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
         <DialogHeader>
           <DialogTitle>{`Edit ${name}`}</DialogTitle>
           <DialogDescription>
-            Update the quantity of the selected item. Enter the new quantity and
-            click save to apply the changes.
+            The item details include:
+            <ul>
+              <li>
+                <strong>Name</strong>: Describes the item.
+              </li>
+              <li>
+                <strong>Quantity</strong>: The amount of the item that can be
+                set.
+              </li>
+              <li>
+                <strong>Low Stock Threshold</strong>: The point at which the
+                inventory is considered low and needs to be restocked.
+              </li>
+            </ul>
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="grid gap-4 py-4">
@@ -124,6 +139,18 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
               type="number"
               value={quantity}
               onChange={(e) => setQuantity(Number(e.target.value))}
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="lowThreshold" className="text-right">
+              Low Stock Threshold
+            </Label>
+            <Input
+              id="lowThreshold"
+              type="number"
+              value={lowThreshold}
+              onChange={(e) => setLowThreshold(Number(e.target.value))}
               className="col-span-3"
             />
           </div>
