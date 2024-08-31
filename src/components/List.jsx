@@ -5,7 +5,7 @@ const List = ({
   data,
   renderItem,
   noItemsMessage = 'No items found.',
-  className = '',
+  className = 'flex flex-col gap-4',
 }) =>
   data.length === 0 ? (
     <div className="p-4 text-gray-500">{noItemsMessage}</div>

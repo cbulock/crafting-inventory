@@ -7,6 +7,7 @@ const useStore = create(
   zustymiddleware((set) => ({
     items: [],
     projects: [],
+    selectedProject: null,
     isLoadingItems: false,
     isLoadingProjects: false,
     fetchItems: async ({ projectId, userId }) => {
@@ -46,6 +47,9 @@ const useStore = create(
         set({ projects: data });
       }
       set({ isLoadingProjects: false });
+    },
+    setSelectedProject: async (projectId) => {
+      set({ selectedProject: projectId });
     },
   })),
 );
