@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { Fragment } from 'react';
 
 const List = ({
   data,
@@ -12,13 +11,13 @@ const List = ({
   ) : (
     <div className={className}>
       {data.map((item, index) => (
-        <Fragment
+        <div
+          className={`p-4 ${index < data.length - 1 ? 'border-b border-gray-200' : ''}`}
           // eslint-disable-next-line react/no-array-index-key
           key={index}
-          // className={`p-4 ${index < data.length - 1 ? 'border-b border-gray-200' : ''}`}
         >
           {renderItem(item)}
-        </Fragment>
+        </div>
       ))}
     </div>
   );

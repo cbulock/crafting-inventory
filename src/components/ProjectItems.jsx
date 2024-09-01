@@ -28,13 +28,13 @@ const ProjectItems = ({ projectId }) => {
   return (
     <List
       data={items}
-      className="grid grid-cols-[auto_1fr_auto] gap-4"
+      className="flex flex-col gap-4"
       renderItem={(item) => (
-        <>
+        <div className="flex items-center gap-4">
           <span className="text-gray-700 font-semibold">{item.quantity}</span>
-          <span className="text-gray-700">{item.name}</span>
+          <span className="text-gray-700 flex-grow">{item.name}</span>
           <EditItemDialog itemId={item.id} projectId={projectId} />
-        </>
+        </div>
       )}
     />
   );

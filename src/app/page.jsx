@@ -1,19 +1,12 @@
 'use client';
 
-import HeaderContent from '@/components/HeaderContent';
-import ProjectView from '@/components/ProjectView';
+import LowStock from '@/components/LowStock';
 import withAuth from '@/components/withAuth';
 
 const HomePage = () => (
-  <div>
-    <header>
-      <HeaderContent />
-    </header>
-    <main className="m-4 max-w-xl mx-auto">
-      <ProjectView />
-    </main>
-    <footer className="m-4">Created by Cameron Bulock</footer>
-  </div>
+  <main className="m-4 max-w-xl mx-auto">
+    <LowStock />
+  </main>
 );
 
 export default withAuth(HomePage);

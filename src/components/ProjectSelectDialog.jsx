@@ -50,7 +50,7 @@ const ProjectSelectDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="text">
+        <Button variant="ghost">
           {selectedProject ? 'Switch' : 'Select a Project'}
         </Button>
       </DialogTrigger>
@@ -62,7 +62,7 @@ const ProjectSelectDialog = () => {
         <List
           data={projects}
           renderItem={(project) => (
-            <Button variant="text" onClick={selectProject(project.id)}>
+            <Button variant="ghost" onClick={selectProject(project.id)}>
               {project.name}
             </Button>
           )}
