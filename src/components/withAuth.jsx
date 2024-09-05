@@ -2,6 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import BASE_PATH from '@/utils/basePath';
 import { useAuth } from '../context/AuthContext';
 
 const withAuth = (WrappedComponent) => (props) => {
@@ -10,7 +11,7 @@ const withAuth = (WrappedComponent) => (props) => {
 
   useEffect(() => {
     if (!user && !loading) {
-      router.replace('/login');
+      router.replace(`${BASE_PATH}/login`);
     }
   }, [loading, user, router]);
 

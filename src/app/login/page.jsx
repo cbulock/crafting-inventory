@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { SiGoogle } from '@icons-pack/react-simple-icons';
+import BASE_PATH from '@/utils/basePath';
 import supabase from '../../utils/supabaseClient';
 
 const LoginPage = () => {
@@ -20,7 +21,7 @@ const LoginPage = () => {
     if (error) {
       console.error('Error logging in with Google:', error);
     } else {
-      router.push('/');
+      router.push(`${BASE_PATH}/`);
     }
   };
 
