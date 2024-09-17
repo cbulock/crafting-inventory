@@ -131,7 +131,10 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="lowThreshold" className="text-right">
+            <Label
+              htmlFor="lowThreshold"
+              className="flex items-center text-right"
+            >
               <Tooltip>
                 <p>
                   The point at which the inventory is considered low and needs
