@@ -3,8 +3,7 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
-import EditItemDialog from '@/components/EditItemDialog';
-import List from '@/components/List';
+import ItemsList from '@/components/ItemsList';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import useStore from '@/store';
 
@@ -25,19 +24,7 @@ const ProjectItems = ({ projectId }) => {
     return <LoadingSpinner />;
   }
 
-  return (
-    <List
-      data={items}
-      className="flex flex-col gap-4"
-      renderItem={(item) => (
-        <div className="flex items-center gap-4">
-          <span className="text-gray-700 font-semibold">{item.quantity}</span>
-          <span className="text-gray-700 flex-grow">{item.name}</span>
-          <EditItemDialog itemId={item.id} projectId={projectId} />
-        </div>
-      )}
-    />
-  );
+  return <ItemsList items={items} projectId={projectId} />;
 };
 
 ProjectItems.propTypes = {

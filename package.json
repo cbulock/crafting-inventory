@@ -2,9 +2,19 @@
   "name": "inventory-manager",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Cameron Bulock",
+    "email": "cameron@bulock.com"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "cross-env NEXT_PUBLIC_BUILD_ENV=web next build",
+    "build:web": "cross-env NEXT_PUBLIC_BUILD_ENV=web next build",
+    "export:web": "npm run build:web && next export",
+    "build:electron": "cross-env NEXT_PUBLIC_BUILD_ENV=electron next build && next export",
+    "electron": "cross-env NEXT_PUBLIC_BUILD_ENV=electron electron .",
+    "electron-dev": "cross-env NEXT_PUBLIC_BUILD_ENV=electron NODE_ENV=development electron .",
+    "electron-pack": "electron-builder",
     "start": "next start",
     "lint": "next lint"
   },
@@ -22,6 +32,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
+    "electron-is-dev": "^3.0.1",
     "lucide-react": "^0.414.0",
     "next": "14.2.5",
     "prop-types": "^15.8.1",
@@ -38,6 +49,9 @@
   "devDependencies": {
     "autoprefixer": "^10.4.19",
     "babel-eslint": "^10.1.0",
+    "cross-env": "^7.0.3",
+    "electron": "^32.0.1",
+    "electron-builder": "^24.13.3",
     "eslint": "^8.57.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-next": "14.2.5",
@@ -51,5 +65,25 @@
     "postcss": "^8.4.40",
     "prettier": "^3.3.3",
     "tailwindcss": "^3.4.6"
+  },
+  "main": "main.js",
+  "build": {
+    "appId": "app.inventory-manager.electron-app",
+    "files": [
+      "main.js",
+      "out/**/*"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "mac": {
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    }
   }
 }

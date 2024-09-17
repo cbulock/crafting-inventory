@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import LogoutButton from '@/components/LogoutButton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -11,7 +12,7 @@ const HeaderBar = () => {
   return (
     <div className="bg-primary	p-2 flex gap-8 items-center">
       <h1 className="text-3xl text-primary-foreground">
-        <a href="/">Inventory Manager</a>
+        <Link href="/">Inventory Manager</Link>
       </h1>
       <nav className="grow">
         <a href="/projects" className="hover:underline text-primary-foreground">

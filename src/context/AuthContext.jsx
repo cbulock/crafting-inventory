@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { createContext, useContext, useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
+import BASE_PATH from '@/utils/basePath';
 import supabase from '../utils/supabaseClient';
 
 const AuthContext = createContext();
@@ -65,7 +66,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     await supabase.auth.signOut();
     setUser(null);
-    router.push('/login');
+    router.push(`${BASE_PATH}/login`);
   };
 
   return useMemo(

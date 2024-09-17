@@ -16,6 +16,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from '@/components/ui/use-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import Tooltip from '@/components/Tooltip';
 import useStore from '@/store';
 import supabase from '../utils/supabaseClient';
 
@@ -102,20 +103,7 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
         <DialogHeader>
           <DialogTitle>{`Edit ${name}`}</DialogTitle>
           <DialogDescription>
-            The item details include:
-            <ul>
-              <li>
-                <strong>Name</strong>: Describes the item.
-              </li>
-              <li>
-                <strong>Quantity</strong>: The amount of the item that can be
-                set.
-              </li>
-              <li>
-                <strong>Low Stock Threshold</strong>: The point at which the
-                inventory is considered low and needs to be restocked.
-              </li>
-            </ul>
+            Update the details of this item.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={onSubmit} className="grid gap-4 py-4">
@@ -143,7 +131,16 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="lowThreshold" className="text-right">
+            <Label
+              htmlFor="lowThreshold"
+              className="flex items-center text-right"
+            >
+              <Tooltip>
+                <p>
+                  The point at which the inventory is considered low and needs
+                  to be restocked.
+                </p>
+              </Tooltip>
               Low Stock Threshold
             </Label>
             <Input

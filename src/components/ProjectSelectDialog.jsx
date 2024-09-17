@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 
 import {
@@ -21,9 +22,9 @@ const ProjectSelectDialog = () => {
     isLoadingProjects: isLoading,
     fetchProjects,
     selectedProject,
-    setSelectedProject,
   } = useStore();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const currentUserId = user?.id;
 
@@ -31,7 +32,7 @@ const ProjectSelectDialog = () => {
     if (open) {
       if (!currentUserId) {
         console.error('No user ID found');
-        // return;
+        return;
       }
 
       fetchProjects(currentUserId);
@@ -43,8 +44,8 @@ const ProjectSelectDialog = () => {
   }
 
   const selectProject = (projectId) => () => {
-    setSelectedProject(projectId);
     setOpen(false);
+    router.push(`/project/${projectId}`);
   };
 
   return (

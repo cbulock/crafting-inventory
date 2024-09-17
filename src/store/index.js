@@ -19,11 +19,12 @@ const useStore = create(
           .from('user_items')
           .select(
             `
-      id,
-      name,
-      items (name),
-      quantity
-    `,
+              id,
+              name,
+              items (name),
+              quantity,
+              is_low_stock
+            `,
           )
           .eq('user', userId)
           .eq('project', projectId)
@@ -46,7 +47,8 @@ const useStore = create(
               name,
               items (name),
               user_projects (id, name),
-              quantity
+              quantity,
+              is_low_stock
             `,
           )
           .eq('user', userId)
