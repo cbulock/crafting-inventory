@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
+import { Button } from '@/components/ui/button';
 import EditItemDialog from '@/components/EditItemDialog';
 import List from '@/components/List';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -34,8 +36,12 @@ const LowStock = () => {
           <div className="flex items-center gap-4">
             <span className="text-gray-700 font-semibold">{item.quantity}</span>
             <span className="text-gray-700">{item.name}</span>
-            <span className="text-gray-600 text-sm flex-grow">
-              {item.user_projects.name}
+            <span className="flex-grow">
+              <Button variant="outline" size="sm" asChild>
+                <Link href={`/project/${item.user_projects.id}`}>
+                  {item.user_projects.name}
+                </Link>
+              </Button>
             </span>
             <EditItemDialog
               itemId={item.id}
