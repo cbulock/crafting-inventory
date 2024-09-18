@@ -20,9 +20,14 @@ import Tooltip from '@/components/Tooltip';
 import useStore from '@/store';
 import supabase from '../utils/supabaseClient';
 
-const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
+const EditItemDialog = ({
+  className = '',
+  itemId,
+  projectId,
+  onClose = () => {},
+}) => {
   const { user } = useAuth();
-  const { fetchItems } = useStore();
+  const { refreshData } = useStore();
   const [name, setName] = useState(null);
   const [quantity, setQuantity] = useState(null);
   const [lowThreshold, setLowThreshold] = useState(null);
@@ -84,7 +89,7 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
       });
       onClose();
       setOpen(false);
-      fetchItems({ userId: currentUserId, projectId });
+      refreshData({ userId: currentUserId, projectId });
     }
   };
 
@@ -95,7 +100,7 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
+        <Button className={className} variant="outline" size="icon">
           <Pencil className="h-4 w-4" />
         </Button>
       </DialogTrigger>
@@ -172,6 +177,7 @@ const EditItemDialog = ({ itemId, projectId, onClose = () => {} }) => {
 };
 
 EditItemDialog.propTypes = {
+  className: PropTypes.string,
   itemId: PropTypes.number.isRequired,
   projectId: PropTypes.number.isRequired,
   onClose: PropTypes.func,
