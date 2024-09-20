@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import clsx from 'clsx';
 import { CircleAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import EditItemDialog from '@/components/EditItemDialog';
@@ -15,11 +16,16 @@ import {
 const ItemsList = ({ items, projectId = null, showProject = false }) => {
   const numOfColumns = showProject ? 5 : 4;
 
+  const gridClass = clsx({
+    'grid-cols-4': numOfColumns === 4,
+    'grid-cols-5': numOfColumns === 5,
+  });
+
   return (
     <List
       showBorder={false}
       data={items}
-      className={`grid grid-cols-${numOfColumns} gap-4 items-center`}
+      className={`grid ${gridClass} grid-template-columns:repeat(${numOfColumns},minmax(0,1fr)) gap-4 items-center`}
       renderItem={(item) => (
         <>
           {showProject && (
