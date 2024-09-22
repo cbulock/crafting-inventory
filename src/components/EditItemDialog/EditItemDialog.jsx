@@ -18,7 +18,8 @@ import { toast } from '@/components/ui/use-toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Tooltip from '@/components/Tooltip';
 import useStore from '@/store';
-import supabase from '../utils/supabaseClient';
+import supabase from '@/utils/supabaseClient';
+import RemoveItemConfirmation from './RemoveItemConfirmation';
 
 const EditItemDialog = ({
   className = '',
@@ -156,7 +157,17 @@ const EditItemDialog = ({
               className="col-span-3"
             />
           </div>
-          <div className="flex justify-end">
+          <div className="flex">
+            <div className="flex-grow">
+              <RemoveItemConfirmation
+                itemId={itemId}
+                name={name}
+                projectId={projectId}
+                onRemove={() => {
+                  setOpen(false);
+                }}
+              />
+            </div>
             <Button
               type="button"
               variant="secondary"
