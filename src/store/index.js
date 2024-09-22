@@ -80,6 +80,12 @@ const useStore = create(
       setSelectedProject: async (projectId) => {
         set({ selectedProject: projectId });
       },
+      refreshData: async ({ userId, projectId }) => {
+        if (projectId) {
+          await useStore.getState().fetchItems({ userId, projectId });
+        }
+        await useStore.getState().fetchLowStock({ userId });
+      },
     }),
     {
       name: 'store',
