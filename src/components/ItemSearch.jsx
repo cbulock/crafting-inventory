@@ -48,6 +48,7 @@ const ItemSearch = ({ projectId }) => {
   const { fetchItems } = useStore();
   const [items, setItems] = useState([]);
   const [itemName, setItemName] = useState(null);
+  const [open, setOpen] = useState(false);
   // TODO: add loading state
   // const [loading, setLoading] = useState(true);
 
@@ -88,6 +89,7 @@ const ItemSearch = ({ projectId }) => {
         project: projectId,
         source_item: item,
         quantity,
+        low_threshold: Math.ceil(quantity * 0.2),
         user: user?.id,
       },
     ]);
@@ -117,7 +119,7 @@ const ItemSearch = ({ projectId }) => {
           render={({ field }) => (
             <FormItem className="flex flex-col">
               <FormLabel>Item</FormLabel>
-              <Popover>
+              <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
@@ -148,6 +150,7 @@ const ItemSearch = ({ projectId }) => {
                             onSelect={() => {
                               form.setValue('item', item.id);
                               setItemName(item.name);
+                              setOpen(false);
                             }}
                           >
                             <Check
