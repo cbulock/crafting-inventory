@@ -3,6 +3,16 @@ import { persist } from 'zustand/middleware';
 
 import supabase from '../utils/supabaseClient';
 
+const transformItems = (items) =>
+  items.map((item) => ({
+    ...item,
+    tags: item.item_tags.map((tag) => ({
+      id: tag.tag,
+      name: tag.user_tags.name,
+      color: tag.user_tags.color,
+    })),
+  }));
+
 const useStore = create(
   persist(
     (set) => ({
@@ -23,7 +33,11 @@ const useStore = create(
               name,
               items (name),
               quantity,
-              is_low_stock
+              is_low_stock,
+              item_tags (
+                tag,
+                user_tags (name, color)
+              )
             `,
           )
           .eq('user', userId)
@@ -33,7 +47,7 @@ const useStore = create(
         if (error) {
           console.error('Error fetching items:', error);
         } else {
-          set({ items: data });
+          set({ items: transformItems(data) });
         }
         set({ isLoadingItems: false });
       },
@@ -48,7 +62,11 @@ const useStore = create(
               items (name),
               user_projects (id, name),
               quantity,
-              is_low_stock
+              is_low_stock,
+              item_tags (
+                tag,
+                user_tags (name, color)
+              )
             `,
           )
           .eq('user', userId)
@@ -58,7 +76,7 @@ const useStore = create(
         if (error) {
           console.error('Error fetching items:', error);
         } else {
-          set({ lowStockItems: data });
+          set({ lowStockItems: transformItems(data) });
         }
         set({ isLoadingLowStock: false });
       },
